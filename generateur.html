@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Générateur de signature</title>
+  <title>Signo - Générateur de signature du Groupe Bacqueyrisses</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,37 +51,21 @@
   </style>
 </head>
 <body>
-  <h1>Générateur de signature</h1>
-
+  <h1>Signo - Générateur de signature du Groupe Bacqueyrisses</h1>
   <div class="container">
-    <!-- FORMULAIRE -->
     <form id="signatureForm">
-
-      <!-- Nom et Prénom -->
       <label for="nom">Nom et Prénom</label>
       <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required />
-
-      <!-- Poste -->
       <label for="poste">Poste / Titre</label>
       <input type="text" id="poste" placeholder="Ex : Assistant Marketing" />
-
-      <!-- Service -->
       <label for="service">Service</label>
       <input type="text" id="service" placeholder="Ex : Marketing, Commercial..." />
-
-      <!-- Téléphone fixe -->
       <label for="telFixe">Téléphone fixe</label>
       <input type="tel" id="telFixe" placeholder="05 57 92 18 28" />
-
-      <!-- Téléphone portable -->
       <label for="telPortable">Téléphone mobile</label>
       <input type="tel" id="telPortable" placeholder="07 68 50 44 14" />
-
-      <!-- Email -->
       <label for="mail">Email</label>
       <input type="email" id="mail" placeholder="exemple@bacqueyrisses.fr" />
-
-      <!-- Filiale -->
       <label for="filiale">Filiale</label>
       <select id="filiale">
         <option value="bacqueyrisses" selected>Bacqueyrisses</option>
@@ -90,38 +74,22 @@
         <option value="skillbus">Skillbus</option>
         <option value="sellerie">Sellerie</option>
       </select>
-
-      <!-- URL de la photo -->
       <label for="photoURL">Photo (URL)</label>
       <input type="text" id="photoURL" placeholder="https://..." />
-
       <button type="button" id="genererBtn">Générer</button>
     </form>
-
-    <!-- APERÇU DE LA SIGNATURE / RENDU HTML -->
     <div class="signature-preview">
       <button class="copy-btn" id="copyBtn">Copier le code HTML</button>
-      <div id="previewArea">
-        <!-- La signature générée s'affiche ici (rendu HTML) -->
-      </div>
+      <div id="previewArea"></div>
     </div>
   </div>
-
+  <p>Version 1 - Janvier 2025</p>
   <script>
-    /**
-     * Données par filiale :
-     * - Couleur (color)
-     * - Site web (website)
-     * - Image de signature (signatureImage)
-     * - Adresse postale (address)
-     * - Lien Google Maps (addressMapURL)
-     * - Réseaux sociaux distincts (socialLinks)
-     */
     const filialeData = {
       bacqueyrisses: {
-        color: '#002D72', 
+        color: '#332c85',
         website: 'https://www.bacqueyrisses.fr/',
-        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/image-signature.gif',
+        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-bacqueyrisses.png',
         address: '2 rue de Fieuzal, 33520 Bruges',
         addressMapURL: 'https://maps.app.goo.gl/XUoCEJyei1q17QUk6',
         socialLinks: {
@@ -129,63 +97,57 @@
           instagram: 'https://www.instagram.com/bacqueyrisses_groupe/',
           facebook: 'https://www.facebook.com/profile.php?id=100065168555655',
           youtube: 'https://www.youtube.com/@groupe-bacqueyrisses'
-        }
+        },
+        defaultPhoto: 'https://yt3.googleusercontent.com/L9y18yV8S2PqgEdQ_sJ9xsUutPywdSD4xfdPw9XLdM-PAd4gPtxfQN-5sK3E4p2sulq7iWtWyg=s160-c-k-c0x00ffffff-no-rj'
       },
       pbc: {
-        color: '#87CEEB', // Bleu ciel
-        website: 'https://www.pbc-exemple.fr/', // Remplace par la vraie URL si besoin
-        signatureImage: 'https://via.placeholder.com/500x100/87CEEB/fff?text=Signature+PBC',
-        address: '123 Avenue PBC, 33000 Bordeaux', // Ex. fictif
-        addressMapURL: 'https://maps.google.com/?q=123+avenue+pbc+bordeaux',
+        color: '#1E2A4F',
+        website: 'https://www.probuscars.fr/',
+        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-pbc.png',
+        address: '2 Rue de Fieuzal, 33520 Bruges',
+        addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0xd55290356abf381:0x841cb21749a9626d?sa=X&ved=1t:8290&ictx=111',
         socialLinks: {
-          linkedin: 'https://www.linkedin.com/company/pbc/',
-          instagram: 'https://www.instagram.com/pbc/',
-          facebook: 'https://www.facebook.com/pbc',
-          youtube: 'https://www.youtube.com/@pbc'
-        }
+          linkedin: 'https://www.linkedin.com/company/pro-bus-cars'
+        },
+        defaultPhoto: 'https://media.licdn.com/dms/image/v2/D560BAQFakQ9i1N4k1g/company-logo_100_100/company-logo_100_100/0/1666881599211/pro_bus_cars_logo?e=1743033600&v=beta&t=jfy8EladIlrMJmTCKQFRSAV3ZFoHOIcs939U6kNFNwg'
       },
       boxtore: {
-        color: '#008000', // Vert
+        color: '#00a339',
         website: 'https://boxtore.fr/',
-        signatureImage: 'https://via.placeholder.com/500x100/008000/fff?text=Signature+Boxtore',
-        address: 'Adresse Boxtore, 99999 Ville', // À personnaliser
-        addressMapURL: 'https://maps.google.com/?q=Adresse+Boxtore',
+        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-boxtore.png',
+        address: '67 Lieu-dit Moulis Z.I Trixe Sortie, 82710 Bressols',
+        addressMapURL: 'https://www.google.com/maps/place/Boxtore/@43.9390767,1.3225351,17z/data=!3m1!4b1!4m6!3m5!1s0x12ac0f9ac9b394d5:0x62a5efc72e446dd8!8m2!3d43.9390767!4d1.3225351!16s%2Fg%2F11w3l4zj41?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D',
         socialLinks: {
           linkedin: 'https://www.linkedin.com/company/boxtore/',
-          instagram: 'https://www.instagram.com/boxtore/',
-          facebook: 'https://www.facebook.com/boxtore',
-          youtube: 'https://www.youtube.com/@boxtore'
-        }
+          instagram: 'https://www.instagram.com/boxtore_selfstockage/',
+          facebook: 'https://www.facebook.com/profile.php?id=61561152950706',
+          youtube: 'https://www.youtube.com/@boxtore-montauban'
+        },
+        defaultPhoto: 'https://media.licdn.com/dms/image/v2/D560BAQFVdaZEnyQhaw/company-logo_100_100/company-logo_100_100/0/1719257514550/boxtore_logo?e=1743033600&v=beta&t=26nzxDUWPTYWeIuavAeeEWHfOQtg3hSMXD_Tf3Gr9_g'
       },
       skillbus: {
-        color: '#FFA500', // Orange
+        color: '#e7511e',
         website: 'https://www.skillbus.fr/',
-        signatureImage: 'https://via.placeholder.com/500x100/FFA500/fff?text=Signature+Skillbus',
-        address: 'Adresse Skillbus, 88888 Ville', // À personnaliser
-        addressMapURL: 'https://maps.google.com/?q=Adresse+Skillbus',
+        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-skillbus.png',
+        address: '4 Rue des Frères Seigneurie, 31830 Plaisance-du-Touch',
+        addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x12aeb3fb0ade6baf:0x42fff4ad5012f2d2?sa=X&ved=1t:8290&ictx=111',
         socialLinks: {
-          linkedin: 'https://www.linkedin.com/company/skillbus/',
-          instagram: 'https://www.instagram.com/skillbus/',
-          facebook: 'https://www.facebook.com/skillbus',
-          youtube: 'https://www.youtube.com/@skillbus'
-        }
+          linkedin: 'https://www.linkedin.com/company/skillbus/'
+        },
+        defaultPhoto: 'https://media.licdn.com/dms/image/v2/C4D0BAQEeQZLdTsN-ZQ/company-logo_100_100/company-logo_100_100/0/1630484852883/skillbus_logo?e=1743033600&v=beta&t=uwJbTBpUIo75URdP4YubKHuBGgKTPHkYZJf2u_b7Xbk'
       },
       sellerie: {
-        color: '#FF0000', // Rouge
+        color: '#a1122a',
         website: 'https://www.sellerie-bacqueyrisses.fr/',
-        signatureImage: 'https://via.placeholder.com/500x100/FF0000/fff?text=Signature+Sellerie',
-        address: 'Adresse Sellerie, 77777 Ville', // À personnaliser
-        addressMapURL: 'https://maps.google.com/?q=Adresse+Sellerie',
+        signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-sellerie.png',
+        address: 'Rte de Lombez, 31830 Plaisance-du-Touch',
+        addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x12aeb302d79c80db:0x9184d1ba1d5368a1?sa=X&ved=1t:8290&ictx=111&cshid=1735040386523745',
         socialLinks: {
-          linkedin: 'https://www.linkedin.com/company/sellerie/',
-          instagram: 'https://www.instagram.com/sellerie/',
-          facebook: 'https://www.facebook.com/sellerie',
-          youtube: 'https://www.youtube.com/@sellerie'
-        }
+          instagram: 'https://www.instagram.com/sellerie_bacqueyrisses/'
+        },
+        defaultPhoto: 'https://scontent-cdg4-1.cdninstagram.com/v/t51.2885-19/272419774_355463726089697_4624008405621560769_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=105&_nc_ohc=XNob9nMudUcQ7kNvgHBp3XG&_nc_gid=123676d1c4794b2e8fe8b8c09bd3f234&edm=APoiHPcBAAAA&ccb=7-5&oh=00_AYCcb3RfBdFURRimFER6RcGcW3Fu2LBBLopPwW4bOZ_VRw&oe=6770A05D&_nc_sid=22de04'
       }
     };
-
-    // Récupération des éléments du DOM
     const form = document.getElementById('signatureForm');
     const nomInput = document.getElementById('nom');
     const posteInput = document.getElementById('poste');
@@ -195,39 +157,25 @@
     const mailInput = document.getElementById('mail');
     const filialeSelect = document.getElementById('filiale');
     const photoURLInput = document.getElementById('photoURL');
-
     const previewArea = document.getElementById('previewArea');
     const copyBtn = document.getElementById('copyBtn');
     const genererBtn = document.getElementById('genererBtn');
 
-    // Génère le code HTML de la signature
     function generateSignatureHTML() {
-      // Valeurs des champs
       const nom = nomInput.value.trim() || 'NOM Prénom';
       const poste = posteInput.value.trim() || 'Poste';
-      const service = serviceInput.value.trim() || ''; // Optionnel
+      const service = serviceInput.value.trim() || '';
       const telFixe = telFixeInput.value.trim();
       const telPortable = telPortableInput.value.trim();
       const mail = mailInput.value.trim() || 'exemple@mail.com';
       const filiale = filialeSelect.value;
       const photoURL = photoURLInput.value.trim();
-
-      // Si aucune photo n'est fournie, on peut utiliser un avatar par défaut
-      const defaultPhoto = 'https://via.placeholder.com/50x50?text=Photo'; 
-      const finalPhotoURL = photoURL || defaultPhoto; 
-
-      // Récupération des paramètres de la filiale
-      const {
-        color,
-        website,
-        signatureImage,
-        address,
-        addressMapURL,
-        socialLinks
-      } = filialeData[filiale];
-
-      // Construction du code HTML
-      // On insère les liens réseaux sociaux de la filiale choisie
+      const { color, website, signatureImage, address, addressMapURL, socialLinks, defaultPhoto } = filialeData[filiale];
+      const finalPhotoURL = photoURL || defaultPhoto;
+      let linkedinLink = socialLinks.linkedin ? `<a href="${socialLinks.linkedin}" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" alt="LinkedIn" width="35" height="35" style="vertical-align: middle;"></a>` : '';
+      let instagramLink = socialLinks.instagram ? `<a href="${socialLinks.instagram}" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" alt="Instagram" width="35" height="35" style="vertical-align: middle;"></a>` : '';
+      let facebookLink = socialLinks.facebook ? `<a href="${socialLinks.facebook}" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" alt="Facebook" width="35" height="35" style="vertical-align: middle;"></a>` : '';
+      let youtubeLink = socialLinks.youtube ? `<a href="${socialLinks.youtube}" target="_blank" style="text-decoration: none;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" alt="YouTube" width="35" height="35" style="vertical-align: middle;"></a>` : '';
       const signatureHTML = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office" 
       xmlns:w="urn:schemas-microsoft-com:office:word" 
@@ -240,11 +188,9 @@
   <table style="max-width: 600px; font-family: Arial, sans-serif; line-height: 1.5; width: 100%;">
     <tr>
       <td>
-        <!-- NOM / POSTE / SERVICE -->
         <table style="width: 100%; display: flex; align-items: center;">
           <tr>
             <td style="padding-right: 10px;">
-              <!-- Photo de profil (dynamique) -->
               <img
                 src="${finalPhotoURL}"
                 alt="Photo de profil" 
@@ -262,12 +208,9 @@
             </td>
           </tr>
         </table>
-
-        <!-- Téléphone fixe (optionnel) -->
         ${
           telFixe
-            ? `
-        <p style="font-size: 14px; margin: 5px 0;">
+            ? `<p style="font-size: 14px; margin: 5px 0;">
           <table style="display: inline-table; vertical-align: middle;">
             <tr>
               <td style="padding-right: 5px;">
@@ -282,16 +225,12 @@
               </td>
             </tr>
           </table>
-        </p>
-        `
+        </p>`
             : ''
         }
-
-        <!-- Téléphone portable (optionnel) -->
         ${
           telPortable
-            ? `
-        <p style="font-size: 14px; margin: 5px 0;">
+            ? `<p style="font-size: 14px; margin: 5px 0;">
           <table style="display: inline-table; vertical-align: middle;">
             <tr>
               <td style="padding-right: 5px;">
@@ -306,12 +245,9 @@
               </td>
             </tr>
           </table>
-        </p>
-        `
+        </p>`
             : ''
         }
-
-        <!-- Email -->
         <p style="font-size: 14px; margin: 5px 0;">
           <table style="display: inline-table; vertical-align: middle;">
             <tr>
@@ -328,8 +264,6 @@
             </tr>
           </table>
         </p>
-
-        <!-- Adresse (dynamique en fonction de la filiale) -->
         <p style="font-size: 14px; margin: 5px 0;">
           <table style="display: inline-table; vertical-align: middle;">
             <tr>
@@ -346,61 +280,12 @@
             </tr>
           </table>
         </p>
-        
-        <!-- Lien du site (selon la filiale) -->
         <a href="${website}" target="_blank" style="font-size: 14px; font-weight: bold; text-decoration: none; color: inherit;">
           ${website.replace(/^https?:\/\//, '')}
         </a>
-
-        <!-- Icônes de réseaux sociaux distincts pour chaque filiale -->
         <div style="margin-top: 10px;">
-          ${
-            socialLinks.linkedin
-              ? `<a href="${socialLinks.linkedin}" target="_blank" style="text-decoration: none; margin-right: 5px;">
-                  <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" 
-                       alt="LinkedIn" 
-                       width="35" 
-                       height="35" 
-                       style="vertical-align: middle;">
-                </a>`
-              : ''
-          }
-          ${
-            socialLinks.instagram
-              ? `<a href="${socialLinks.instagram}" target="_blank" style="text-decoration: none; margin-right: 5px;">
-                  <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" 
-                       alt="Instagram" 
-                       width="35" 
-                       height="35" 
-                       style="vertical-align: middle;">
-                </a>`
-              : ''
-          }
-          ${
-            socialLinks.facebook
-              ? `<a href="${socialLinks.facebook}" target="_blank" style="text-decoration: none; margin-right: 5px;">
-                  <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" 
-                       alt="Facebook" 
-                       width="35" 
-                       height="35" 
-                       style="vertical-align: middle;">
-                </a>`
-              : ''
-          }
-          ${
-            socialLinks.youtube
-              ? `<a href="${socialLinks.youtube}" target="_blank" style="text-decoration: none;">
-                  <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" 
-                       alt="YouTube" 
-                       width="35" 
-                       height="35" 
-                       style="vertical-align: middle;">
-                </a>`
-              : ''
-          }
+          ${linkedinLink}${instagramLink}${facebookLink}${youtubeLink}
         </div>
-
-        <!-- Image de signature / Bannière (selon la filiale) -->
         <p style="margin-top: 20px;">
           <a href="${website}" target="_blank" style="border: none; text-decoration: none;">
             <img 
@@ -410,10 +295,8 @@
               style="border: none;">
           </a>
         </p>
-
-        <!-- Mentions légales -->
         <div style="max-width: 600px;">
-          <p style="font-size: 12px; color: ${color}; margin-top: 20px; line-height: 1.6;">
+          <p style="font-size: 12px; color: #561164; margin-top: 20px; line-height: 1.6;">
             <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/logo-afaq.jpg" 
                  alt="Certification AFAQ" 
                  style="width: 25px; height: 25px; vertical-align: middle; margin-right: 5px;">
@@ -438,17 +321,12 @@
 </body>
 </html>
       `;
-
       return signatureHTML;
     }
-
-    // Quand on clique sur "Générer", on affiche la signature en HTML dans l'aperçu
     genererBtn.addEventListener('click', () => {
       const html = generateSignatureHTML();
-      previewArea.innerHTML = html; // Affiche le rendu HTML dans l'aperçu
+      previewArea.innerHTML = html;
     });
-
-    // Quand on clique sur "Copier le code HTML", on copie le code dans le presse-papiers
     copyBtn.addEventListener('click', () => {
       const html = generateSignatureHTML();
       const tempTextarea = document.createElement('textarea');
