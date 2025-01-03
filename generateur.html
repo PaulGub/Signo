@@ -55,7 +55,8 @@
   <h1>Signo - Générateur de signature</h1>
   <div class="container">
     <form id="signatureForm">
-      <label for="nom">Nom et Prénom <span class="required-asterisk">*</span></label>
+      <!-- CHANGEMENT ICI : label Prénom et Nom -->
+      <label for="nom">Prénom et Nom <span class="required-asterisk">*</span></label>
       <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required />
 
       <label for="posteService">Poste / Service <span class="required-asterisk">*</span></label>
@@ -71,6 +72,16 @@
         <option value="boxtore">Boxtore</option>
         <option value="skillbus">Skillbus</option>
         <option value="sellerie">Sellerie</option>
+      </select>
+
+      <label id="labelVille" for="ville">Ville <span class="required-asterisk">*</span></label>
+      <select id="ville">
+        <option value="Bruges" selected>Bruges</option>
+        <option value="Rochefort">Rochefort</option>
+        <option value="Lourdes">Lourdes</option>
+        <option value="Lons">Lons</option>
+        <option value="Bressols">Bressols</option>
+        <option value="Plaisance du Touch">Plaisance du Touch</option>
       </select>
 
       <label for="telFixe">Téléphone fixe</label>
@@ -91,6 +102,35 @@
   </div>
 
   <script>
+    // Villes spécifiques pour la filiale Bacqueyrisses
+    const bacqueyrissesCities = {
+      Bruges: {
+        address: '2 rue de Fieuzal, 33520 Bruges',
+        addressMapURL: 'https://maps.app.goo.gl/XUoCEJyei1q17QUk6'
+      },
+      Rochefort: {
+        address: '1 Chem. de la Charre, 17300 Rochefort',
+        addressMapURL: 'https://maps.app.goo.gl/CFQ4QC35KXr2CG9T8'
+      },
+      Lourdes: {
+        address: '3 Rue Ampère, 65100 Lourdes',
+        addressMapURL: 'https://maps.app.goo.gl/3vLjsQ9tmbEbcsv28'
+      },
+      Lons: {
+        address: 'Zone Induspal, 6 Av. Barthélémy Thimonnier, 64140 Lons',
+        addressMapURL: 'https://maps.app.goo.gl/NbyUhm8VC6Ayvi5h7'
+      },
+      Bressols: {
+        address: 'Z.I TRIXES Sortie 67, lieu dit, 82710 Bressols',
+        addressMapURL: 'https://maps.app.goo.gl/tYRB2Grjz1p3LDhK8'
+      },
+      'Plaisance du Touch': {
+        address: '4 Rue des Frères Seigneurie, 31830 Plaisance-du-Touch',
+        addressMapURL: 'https://maps.app.goo.gl/RuCEgm7X8uCCaiKG6'
+      }
+    }
+
+    // Données des filiales
     const filialeData = {
       bacqueyrisses: {
         color: '#332c85',
@@ -153,42 +193,102 @@
         },
         defaultPhoto: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/47983569412c5fa66f2b56955c2dfa0aa261265e/default-sellerie.jpg'
       }
-    };
+    }
 
-    const form = document.getElementById('signatureForm');
-    const nomInput = document.getElementById('nom');
-    const posteServiceInput = document.getElementById('posteService');
-    const mailInput = document.getElementById('mail');
-    const filialeSelect = document.getElementById('filiale');
-    const telFixeInput = document.getElementById('telFixe');
-    const telPortableInput = document.getElementById('telPortable');
-    const photoURLInput = document.getElementById('photoURL');
-    const previewArea = document.getElementById('previewArea');
-    const copyBtn = document.getElementById('copyBtn');
-    const genererBtn = document.getElementById('genererBtn');
+    const form = document.getElementById('signatureForm')
+    const nomInput = document.getElementById('nom')
+    const posteServiceInput = document.getElementById('posteService')
+    const mailInput = document.getElementById('mail')
+    const filialeSelect = document.getElementById('filiale')
+    const telFixeInput = document.getElementById('telFixe')
+    const telPortableInput = document.getElementById('telPortable')
+    const photoURLInput = document.getElementById('photoURL')
+    const previewArea = document.getElementById('previewArea')
+    const copyBtn = document.getElementById('copyBtn')
+    const genererBtn = document.getElementById('genererBtn')
+    const villeSelect = document.getElementById('ville')
+    const labelVille = document.getElementById('labelVille')
+
+    // Pour rendre la liste déroulante de ville visible si on est sur Bacqueyrisses (par défaut)
+    if (filialeSelect.value === 'bacqueyrisses') {
+      villeSelect.style.display = 'block'
+      labelVille.style.display = 'block'
+      villeSelect.required = true
+    } else {
+      villeSelect.style.display = 'none'
+      labelVille.style.display = 'none'
+      villeSelect.required = false
+    }
+
+    // Quand l'utilisateur change de filiale
+    filialeSelect.addEventListener('change', () => {
+      if (filialeSelect.value === 'bacqueyrisses') {
+        villeSelect.style.display = 'block'
+        labelVille.style.display = 'block'
+        villeSelect.required = true
+      } else {
+        villeSelect.style.display = 'none'
+        labelVille.style.display = 'none'
+        villeSelect.required = false
+      }
+    })
 
     function generateSignatureHTML() {
-      const nom = nomInput.value.trim();
-      const posteService = posteServiceInput.value.trim();
-      const mail = mailInput.value.trim();
-      const filiale = filialeSelect.value;
-      const telFixe = telFixeInput.value.trim();
-      const telPortable = telPortableInput.value.trim();
-      const photoURL = photoURLInput.value.trim();
-      const data = filialeData[filiale];
-      const color = data.color;
-      const website = data.website;
-      const signatureImage = data.signatureImage;
-      const address = data.address;
-      const addressMapURL = data.addressMapURL;
-      const socialLinks = data.socialLinks;
-      const defaultPhoto = data.defaultPhoto;
-      const finalPhotoURL = photoURL || defaultPhoto;
-      const lk = socialLinks.linkedin ? '<a href="' + socialLinks.linkedin + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" alt="LinkedIn" width="25" height="25" style="vertical-align: middle;"></a>' : '';
-      const ig = socialLinks.instagram ? '<a href="' + socialLinks.instagram + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" alt="Instagram" width="25" height="25" style="vertical-align: middle;"></a>' : '';
-      const fb = socialLinks.facebook ? '<a href="' + socialLinks.facebook + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" alt="Facebook" width="25" height="25" style="vertical-align: middle;"></a>' : '';
-      const yt = socialLinks.youtube ? '<a href="' + socialLinks.youtube + '" target="_blank" style="text-decoration: none;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" alt="YouTube" width="25" height="25" style="vertical-align: middle;"></a>' : '';
+      const nom = nomInput.value.trim()
+      const posteService = posteServiceInput.value.trim()
+      const mail = mailInput.value.trim()
+      const filiale = filialeSelect.value
+      const telFixe = telFixeInput.value.trim()
+      const telPortable = telPortableInput.value.trim()
+      const photoURL = photoURLInput.value.trim()
+      // Copie par valeur pour éviter de modifier l’original :
+      const data = JSON.parse(JSON.stringify(filialeData[filiale]))
+      
+      // Gestion de la ville pour Bacqueyrisses
+      if (filiale === 'bacqueyrisses') {
+        const selectedCity = villeSelect.value
+        if (bacqueyrissesCities[selectedCity]) {
+          data.address = bacqueyrissesCities[selectedCity].address
+          data.addressMapURL = bacqueyrissesCities[selectedCity].addressMapURL
+        }
+      }
 
+      const color = data.color
+      const website = data.website
+      const signatureImage = data.signatureImage
+      const address = data.address
+      const addressMapURL = data.addressMapURL
+      const socialLinks = data.socialLinks
+      const defaultPhoto = data.defaultPhoto
+      const finalPhotoURL = photoURL || defaultPhoto
+
+      // Icônes réseaux sociaux (en fonction de la filiale)
+      const lk = socialLinks.linkedin 
+        ? `<a href="${socialLinks.linkedin}" target="_blank" style="text-decoration: none; margin-right: 5px;">
+             <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" 
+                  alt="LinkedIn" width="25" height="25" style="vertical-align: middle;">
+           </a>` 
+        : ''
+      const ig = socialLinks.instagram
+        ? `<a href="${socialLinks.instagram}" target="_blank" style="text-decoration: none; margin-right: 5px;">
+             <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" 
+                  alt="Instagram" width="25" height="25" style="vertical-align: middle;">
+           </a>`
+        : ''
+      const fb = socialLinks.facebook
+        ? `<a href="${socialLinks.facebook}" target="_blank" style="text-decoration: none; margin-right: 5px;">
+             <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" 
+                  alt="Facebook" width="25" height="25" style="vertical-align: middle;">
+           </a>`
+        : ''
+      const yt = socialLinks.youtube
+        ? `<a href="${socialLinks.youtube}" target="_blank" style="text-decoration: none;">
+             <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" 
+                  alt="YouTube" width="25" height="25" style="vertical-align: middle;">
+           </a>`
+        : ''
+
+      // Construction du code HTML de la signature
       return `
 <html xmlns:o="urn:schemas-microsoft-com:office:office"
       xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -216,7 +316,9 @@
     </tr>
     <tr>
       <td style="font-size: 14px; padding-bottom: 10px;">
-        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-email.png" alt="Email" width="18" height="18" style="vertical-align: middle; margin-right: 6px;">
+        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-email.png" 
+             alt="Email" width="18" height="18" 
+             style="vertical-align: middle; margin-right: 6px;">
         <a href="mailto:${mail}" style="color: #000000; text-decoration: none;">${mail}</a>
       </td>
     </tr>
@@ -225,7 +327,9 @@
         ? `
     <tr>
       <td style="font-size: 14px; padding-bottom: 10px;">
-        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-phone-fixe.png" alt="Fixe" width="18" height="18" style="vertical-align: middle; margin-right: 6px;">
+        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-phone-fixe.png" 
+             alt="Fixe" width="18" height="18" 
+             style="vertical-align: middle; margin-right: 6px;">
         <a href="tel:+33${telFixe.replace(/\s/g, '')}" style="color: #000000; text-decoration: none;">
           ${telFixe}
         </a>
@@ -239,7 +343,9 @@
         ? `
     <tr>
       <td style="font-size: 14px; padding-bottom: 10px;">
-        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-phone-mobile.png" alt="Mobile" width="18" height="18" style="vertical-align: middle; margin-right: 6px;">
+        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-phone-mobile.png" 
+             alt="Mobile" width="18" height="18" 
+             style="vertical-align: middle; margin-right: 6px;">
         <a href="tel:+33${telPortable.replace(/\s/g, '')}" style="color: #000000; text-decoration: none;">
           ${telPortable}
         </a>
@@ -250,7 +356,9 @@
     }
     <tr>
       <td style="font-size: 14px; padding-bottom: 10px;">
-        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-map.png" alt="Adresse" width="18" height="18" style="vertical-align: middle; margin-right: 6px;">
+        <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-map.png" 
+             alt="Adresse" width="18" height="18" 
+             style="vertical-align: middle; margin-right: 6px;">
         <a href="${addressMapURL}" style="color: #000000; text-decoration: none;">
           ${address}
         </a>
@@ -278,49 +386,77 @@
     <tr>
       <td style="font-size: 12px; line-height: 1.5;">
         <p style="margin-top: 0; color: #561164;">
-          <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/logo-afaq.png" alt="AFAQ" width="25" height="25" style="vertical-align: middle; margin-right: 5px;">
+          <img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/logo-afaq.png" 
+               alt="AFAQ" width="25" height="25" 
+               style="vertical-align: middle; margin-right: 5px;">
           Notre organisme est certifié AFAQ ISO 9001.
         </p>
         <p style="color: red;">
-          Afin de respecter votre droit à la déconnexion, vous ne devez pas répondre à ce message en dehors de vos horaires de travail ou pendant vos congés, sauf si le sujet représente un caractère de gravité et/ou d'urgence.
+          Afin de respecter votre droit à la déconnexion, vous ne devez pas répondre à ce message 
+          en dehors de vos horaires de travail ou pendant vos congés, 
+          sauf si le sujet représente un caractère de gravité et/ou d'urgence.
         </p>
         <p style="color: black;">
-          Les informations contenues dans ce courrier électronique sont confidentielles et protégées par le secret professionnel. Elles ne sont destinées qu'à la personne ou entreprise mentionnée ci-dessus. Veuillez aviser l'expéditeur en cas d'erreur. Si vous n'êtes pas le destinataire, vous n'êtes pas autorisé à copier, divulguer ou diffuser ce document.
+          Les informations contenues dans ce courrier électronique sont confidentielles 
+          et protégées par le secret professionnel. Elles ne sont destinées 
+          qu'à la personne ou entreprise mentionnée ci-dessus. Veuillez aviser l'expéditeur en cas d'erreur. 
+          Si vous n'êtes pas le destinataire, vous n'êtes pas autorisé à copier, divulguer ou diffuser ce document.
         </p>
         <p style="color: green;">
-          &#127793; Afin de contribuer au respect de l'environnement, merci de n'imprimer ce courriel qu'en cas de nécessité.
+          &#127793; Afin de contribuer au respect de l'environnement, 
+          merci de n'imprimer ce courriel qu'en cas de nécessité.
         </p>
       </td>
     </tr>
   </table>
 </body>
 </html>
-      `;
+      `
     }
 
+    // Bouton "Générer"
     genererBtn.addEventListener('click', () => {
-      if (!nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
-        alert("Veuillez remplir tous les champs obligatoires.");
-        return;
+      if (
+        !nomInput.checkValidity() ||
+        !posteServiceInput.checkValidity() ||
+        !mailInput.checkValidity() ||
+        !filialeSelect.checkValidity()
+      ) {
+        alert("Veuillez remplir tous les champs obligatoires.")
+        return
       }
-      const html = generateSignatureHTML();
-      previewArea.innerHTML = html;
-    });
+      if (filialeSelect.value === 'bacqueyrisses' && !villeSelect.checkValidity()) {
+        alert("Veuillez choisir la ville pour la filiale Bacqueyrisses.")
+        return
+      }
+      const html = generateSignatureHTML()
+      previewArea.innerHTML = html
+    })
 
+    // Bouton "Copier le code HTML"
     copyBtn.addEventListener('click', () => {
-      if (!nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
-        alert("Veuillez remplir tous les champs obligatoires avant de copier le code.");
-        return;
+      if (
+        !nomInput.checkValidity() ||
+        !posteServiceInput.checkValidity() ||
+        !mailInput.checkValidity() ||
+        !filialeSelect.checkValidity()
+      ) {
+        alert("Veuillez remplir tous les champs obligatoires avant de copier le code.")
+        return
       }
-      const html = generateSignatureHTML();
-      const temp = document.createElement('textarea');
-      temp.value = html;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-      alert('Code HTML copié dans le presse-papiers !');
-    });
+      if (filialeSelect.value === 'bacqueyrisses' && !villeSelect.checkValidity()) {
+        alert("Veuillez choisir la ville pour la filiale Bacqueyrisses.")
+        return
+      }
+      const html = generateSignatureHTML()
+      const temp = document.createElement('textarea')
+      temp.value = html
+      document.body.appendChild(temp)
+      temp.select()
+      document.execCommand('copy')
+      document.body.removeChild(temp)
+      alert('Code HTML copié dans le presse-papiers !')
+    })
   </script>
 </body>
 </html>
