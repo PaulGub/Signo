@@ -21,6 +21,10 @@
       margin-bottom: 5px;
       font-weight: bold;
     }
+    .required-asterisk {
+      color: red;
+      margin-left: 3px;
+    }
     input, select, button {
       margin-bottom: 10px;
       padding: 8px;
@@ -51,28 +55,33 @@
   <h1>Signo - Générateur de signature</h1>
   <div class="container">
     <form id="signatureForm">
-      <label for="nom">Nom et Prénom</label>
+      <label for="nom">Nom et Prénom <span class="required-asterisk">*</span></label>
       <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required />
-      <label for="poste">Poste / Titre</label>
-      <input type="text" id="poste" placeholder="Ex : Assistant" />
-      <label for="service">Service</label>
-      <input type="text" id="service" placeholder="Ex : Marketing, Commercial..." />
-      <label for="telFixe">Téléphone fixe</label>
-      <input type="tel" id="telFixe" placeholder="05 57 92 18 28" />
-      <label for="telPortable">Téléphone mobile</label>
-      <input type="tel" id="telPortable" placeholder="07 68 50 44 14" />
-      <label for="mail">Email</label>
-      <input type="email" id="mail" placeholder="exemple@bacqueyrisses.fr" />
-      <label for="filiale">Filiale</label>
-      <select id="filiale">
+
+      <label for="posteService">Poste / Service <span class="required-asterisk">*</span></label>
+      <input type="text" id="posteService" placeholder="Ex : Assistant Marketing" required />
+
+      <label for="mail">Email <span class="required-asterisk">*</span></label>
+      <input type="email" id="mail" placeholder="exemple@bacqueyrisses.fr" required />
+
+      <label for="filiale">Filiale <span class="required-asterisk">*</span></label>
+      <select id="filiale" required>
         <option value="bacqueyrisses" selected>Bacqueyrisses</option>
         <option value="pbc">PBC</option>
         <option value="boxtore">Boxtore</option>
         <option value="skillbus">Skillbus</option>
         <option value="sellerie">Sellerie</option>
       </select>
+
+      <label for="telFixe">Téléphone fixe</label>
+      <input type="tel" id="telFixe" placeholder="05 57 92 18 28" />
+
+      <label for="telPortable">Téléphone mobile</label>
+      <input type="tel" id="telPortable" placeholder="07 68 50 44 14" />
+
       <label for="photoURL">Photo (URL)</label>
       <input type="text" id="photoURL" placeholder="https://..." />
+
       <button type="button" id="genererBtn">Générer</button>
     </form>
     <div class="signature-preview">
@@ -80,6 +89,7 @@
       <div id="previewArea"></div>
     </div>
   </div>
+
   <script>
     const filialeData = {
       bacqueyrisses: {
@@ -147,25 +157,23 @@
 
     const form = document.getElementById('signatureForm');
     const nomInput = document.getElementById('nom');
-    const posteInput = document.getElementById('poste');
-    const serviceInput = document.getElementById('service');
-    const telFixeInput = document.getElementById('telFixe');
-    const telPortableInput = document.getElementById('telPortable');
+    const posteServiceInput = document.getElementById('posteService');
     const mailInput = document.getElementById('mail');
     const filialeSelect = document.getElementById('filiale');
+    const telFixeInput = document.getElementById('telFixe');
+    const telPortableInput = document.getElementById('telPortable');
     const photoURLInput = document.getElementById('photoURL');
     const previewArea = document.getElementById('previewArea');
     const copyBtn = document.getElementById('copyBtn');
     const genererBtn = document.getElementById('genererBtn');
 
     function generateSignatureHTML() {
-      const nom = nomInput.value.trim() || 'NOM PRENOM';
-      const poste = posteInput.value.trim() || 'Poste';
-      const service = serviceInput.value.trim() ? ' - ' + serviceInput.value.trim() : '';
+      const nom = nomInput.value.trim();
+      const posteService = posteServiceInput.value.trim();
+      const mail = mailInput.value.trim();
+      const filiale = filialeSelect.value;
       const telFixe = telFixeInput.value.trim();
       const telPortable = telPortableInput.value.trim();
-      const mail = mailInput.value.trim() || 'exemple@mail.com';
-      const filiale = filialeSelect.value;
       const photoURL = photoURLInput.value.trim();
       const data = filialeData[filiale];
       const color = data.color;
@@ -203,7 +211,7 @@
     </tr>
     <tr>
       <td style="font-size: 14px; font-style: italic; padding-bottom: 10px;">
-        ${poste}${service}
+        ${posteService}
       </td>
     </tr>
     <tr>
@@ -291,11 +299,19 @@
     }
 
     genererBtn.addEventListener('click', () => {
+      if (!nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
+        alert("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
       const html = generateSignatureHTML();
       previewArea.innerHTML = html;
     });
 
     copyBtn.addEventListener('click', () => {
+      if (!nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
+        alert("Veuillez remplir tous les champs obligatoires avant de copier le code.");
+        return;
+      }
       const html = generateSignatureHTML();
       const temp = document.createElement('textarea');
       temp.value = html;
