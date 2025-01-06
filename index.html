@@ -21,6 +21,11 @@
       margin-bottom: 5px;
       font-weight: bold;
     }
+    .explications {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
     .required-asterisk {
       color: red;
       margin-left: 3px;
@@ -57,18 +62,23 @@
     <img src="logo-signo.webp" alt="Logo Signo" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
     <h1 style="margin: 0; font-size: 24px; text-align: center;">Signo, le générateur de signature mail du Groupe Bacqueyrisses</h1>
   </div>
+
   <div class="container">
     <form id="signatureForm">
       <label for="nom">Prénom et Nom <span class="required-asterisk">*</span></label>
+      <p class="explications">Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti.</p>
       <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required>
 
       <label for="posteService">Poste / Service <span class="required-asterisk">*</span></label>
+      <p class="explications">Indiquez ici votre intitulé de poste, ainsi que votre service ou département si nécessaire.</p>
       <input type="text" id="posteService" placeholder="Ex : Assistant Marketing" required>
 
       <label for="mail">Email <span class="required-asterisk">*</span></label>
+      <p class="explications">Entrez votre adresse mail professionnelle. Par exemple : exemple@bacqueyrisses.fr.</p>
       <input type="email" id="mail" placeholder="exemple@bacqueyrisses.fr" required>
 
       <label for="filiale">Filiale <span class="required-asterisk">*</span></label>
+      <p class="explications">Sélectionnez la filiale du Groupe Bacqueyrisses à laquelle vous appartenez.</p>
       <select id="filiale" required>
         <option value="bacqueyrisses" selected>Bacqueyrisses</option>
         <option value="pbc">PBC</option>
@@ -77,8 +87,9 @@
         <option value="sellerie">Sellerie</option>
       </select>
 
-      <label id="labelVille" for="ville">Ville <span class="required-asterisk">*</span></label>
-      <select id="ville">
+      <label id="labelVille" for="ville" style="display:none;">Ville <span class="required-asterisk">*</span></label>
+      <p id="explicationsVille" class="explications" style="display:none;">Uniquement si vous dépendez de la filiale Bacqueyrisses : choisissez la ville de votre site.</p>
+      <select id="ville" style="display:none;">
         <option value="Bruges" selected>Bruges</option>
         <option value="Rochefort">Rochefort</option>
         <option value="Lourdes">Lourdes</option>
@@ -88,16 +99,23 @@
       </select>
 
       <label for="telFixe">Téléphone fixe</label>
+      <p class="explications">Indiquez votre numéro de ligne fixe si vous en possédez un. Par exemple : 05 57 92 18 28.</p>
       <input type="tel" id="telFixe" placeholder="05 57 92 18 28">
 
       <label for="telPortable">Téléphone mobile</label>
+      <p class="explications">Indiquez votre numéro de téléphone mobile si vous souhaitez qu’il apparaisse dans la signature.</p>
       <input type="tel" id="telPortable" placeholder="07 68 50 44 14">
 
       <label for="photoURL">Photo (URL)</label>
+      <p class="explications">
+        Collez l’URL de votre photo de profil.
+        Si vous utilisez LinkedIn par exemple, effectuez un clic droit sur votre photo puis “Copier l’adresse de l’image”.
+      </p>
       <input type="text" id="photoURL" placeholder="https://...">
 
       <button type="button" id="genererBtn">Générer</button>
     </form>
+
     <div class="signature-preview">
       <button class="copy-btn" id="copyBtn">Copier le code HTML</button>
       <button class="copy-btn" id="copyPreviewBtn">Copier l'aperçu</button>
@@ -132,6 +150,7 @@
         addressMapURL: 'https://maps.app.goo.gl/RuCEgm7X8uCCaiKG6'
       }
     };
+
     const filialeData = {
       bacqueyrisses: {
         color: '#332c85',
@@ -195,7 +214,7 @@
         defaultPhoto: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/47983569412c5fa66f2b56955c2dfa0aa261265e/default-sellerie.jpg'
       }
     };
-    const form = document.getElementById('signatureForm');
+
     const nomInput = document.getElementById('nom');
     const posteServiceInput = document.getElementById('posteService');
     const mailInput = document.getElementById('mail');
@@ -209,14 +228,17 @@
     const genererBtn = document.getElementById('genererBtn');
     const villeSelect = document.getElementById('ville');
     const labelVille = document.getElementById('labelVille');
+    const explicationsVille = document.getElementById('explicationsVille');
 
     if (filialeSelect.value === 'bacqueyrisses') {
       villeSelect.style.display = 'block';
       labelVille.style.display = 'block';
+      explicationsVille.style.display = 'block';
       villeSelect.required = true;
     } else {
       villeSelect.style.display = 'none';
       labelVille.style.display = 'none';
+      explicationsVille.style.display = 'none';
       villeSelect.required = false;
     }
 
@@ -224,10 +246,12 @@
       if (filialeSelect.value === 'bacqueyrisses') {
         villeSelect.style.display = 'block';
         labelVille.style.display = 'block';
+        explicationsVille.style.display = 'block';
         villeSelect.required = true;
       } else {
         villeSelect.style.display = 'none';
         labelVille.style.display = 'none';
+        explicationsVille.style.display = 'none';
         villeSelect.required = false;
       }
     });
@@ -241,6 +265,7 @@
       const telPortable = telPortableInput.value.trim();
       const photoURL = photoURLInput.value.trim();
       const data = JSON.parse(JSON.stringify(filialeData[filiale]));
+
       if (filiale === 'bacqueyrisses') {
         const selectedCity = villeSelect.value;
         if (bacqueyrissesCities[selectedCity]) {
@@ -248,6 +273,7 @@
           data.addressMapURL = bacqueyrissesCities[selectedCity].addressMapURL;
         }
       }
+
       const color = data.color;
       const website = data.website;
       const signatureImage = data.signatureImage;
@@ -256,6 +282,7 @@
       const socialLinks = data.socialLinks;
       const defaultPhoto = data.defaultPhoto;
       const finalPhotoURL = photoURL || defaultPhoto;
+
       const lk = socialLinks.linkedin 
         ? '<a href="' + socialLinks.linkedin + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" alt="LinkedIn" width="25" height="25" style="vertical-align: middle;"></a>' 
         : '';
@@ -268,10 +295,12 @@
       const yt = socialLinks.youtube
         ? '<a href="' + socialLinks.youtube + '" target="_blank" style="text-decoration: none;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" alt="YouTube" width="25" height="25" style="vertical-align: middle;"></a>'
         : '';
+
       let afaqBlock = '';
       if (filiale === 'bacqueyrisses') {
         afaqBlock = '<p style="margin-top: 0; color: #561164;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/logo-afaq.png" alt="AFAQ" width="25" height="25" style="vertical-align: middle; margin-right: 5px;">Notre organisme est certifié AFAQ ISO 9001.</p>';
       }
+
       return (
         '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40">' +
         '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' +
