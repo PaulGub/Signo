@@ -65,13 +65,20 @@
 
   <div class="container">
     <form id="signatureForm">
-      <label for="nom">Prénom et Nom <span class="required-asterisk">*</span></label>
-      <p class="explications">Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti. Si cette adresse e-mail est utilisée pour un service spécifique (par exemple, Marketing), veuillez mentionner le nom du service.</p>
-      <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required>
+      <label for="typeAdresse">Type d'adresse<span class="required-asterisk">*</span></label>
+      <p class="explications">Choisissez si vous utilisez une adresse personnelle ou celle d'un service.</p>
+      <select id="typeAdresse" required>
+        <option value="perso" selected>Adresse personnelle</option>
+        <option value="service">Adresse du service</option>
+      </select>
 
-      <label for="posteService">Poste / Service</label>
-      <p class="explications">Indiquez ici votre intitulé de poste, ainsi que votre service ou département si nécessaire.</p>
-      <input type="text" id="posteService" placeholder="Ex : Assistant Marketing">
+      <label id="labelNom" for="nom">Prénom et Nom<span class="required-asterisk">*</span></label>
+      <p id="explicationsNom" class="explications">Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti.</p>
+      <input type="text" id="nom" required>
+
+      <label id="labelPosteService" for="posteService">Poste / Service<span class="required-asterisk">*</span></label>
+      <p id="explicationsPosteService" class="explications">Indiquez votre poste (ou nom du département). Exemple : Assistant Marketing.</p>
+      <input type="text" id="posteService" required>
 
       <label for="mail">Email <span class="required-asterisk">*</span></label>
       <p class="explications">Entrez votre adresse mail professionnelle. Par exemple : exemple@bacqueyrisses.fr.</p>
@@ -99,18 +106,15 @@
       </select>
 
       <label for="telFixe">Téléphone fixe</label>
-      <p class="explications">Indiquez votre numéro de ligne fixe si vous en possédez un. Par exemple : 05 57 92 18 28.</p>
+      <p class="explications">Indiquez votre numéro de ligne fixe si vous en possédez un. Exemple : 05 57 92 18 28.</p>
       <input type="tel" id="telFixe" placeholder="05 57 92 18 28">
 
       <label for="telPortable">Téléphone mobile</label>
-      <p class="explications">Indiquez votre numéro de téléphone mobile si vous souhaitez qu’il apparaisse dans la signature.</p>
+      <p class="explications">Indiquez votre numéro de téléphone mobile si vous souhaitez qu’il apparaisse dans la signature. Exemple : 07 68 50 44 14.</p>
       <input type="tel" id="telPortable" placeholder="07 68 50 44 14">
 
       <label for="photoURL">Photo (URL)</label>
-      <p class="explications">
-        Collez l’URL de votre photo de profil.
-        Si vous utilisez LinkedIn par exemple, effectuez un clic droit sur votre photo puis “Copier l’adresse de l’image”.
-      </p>
+      <p class="explications">Collez l’URL de votre photo de profil. Exemple : https://votrephoto.jpg</p>
       <input type="text" id="photoURL" placeholder="https://...">
 
       <button type="button" id="genererBtn">Générer</button>
@@ -125,30 +129,12 @@
 
   <script>
     const bacqueyrissesCities = {
-      Bruges: {
-        address: '2 rue de Fieuzal, 33520 Bruges',
-        addressMapURL: 'https://maps.app.goo.gl/XUoCEJyei1q17QUk6'
-      },
-      Rochefort: {
-        address: '1 Chem. de la Charre, 17300 Rochefort',
-        addressMapURL: 'https://maps.app.goo.gl/CFQ4QC35KXr2CG9T8'
-      },
-      Lourdes: {
-        address: '3 Rue Ampère, 65100 Lourdes',
-        addressMapURL: 'https://maps.app.goo.gl/3vLjsQ9tmbEbcsv28'
-      },
-      Lons: {
-        address: 'Zone Induspal, 6 Av. Barthélémy Thimonnier, 64140 Lons',
-        addressMapURL: 'https://maps.app.goo.gl/NbyUhm8VC6Ayvi5h7'
-      },
-      Bressols: {
-        address: 'Z.I TRIXES Sortie 67, lieu dit, 82710 Bressols',
-        addressMapURL: 'https://maps.app.goo.gl/tYRB2Grjz1p3LDhK8'
-      },
-      'Plaisance du Touch': {
-        address: '4 Rue des Frères Seigneurie, 31830 Plaisance-du-Touch',
-        addressMapURL: 'https://maps.app.goo.gl/RuCEgm7X8uCCaiKG6'
-      }
+      Bruges: { address: '2 rue de Fieuzal, 33520 Bruges', addressMapURL: 'https://maps.app.goo.gl/XUoCEJyei1q17QUk6' },
+      Rochefort: { address: '1 Chem. de la Charre, 17300 Rochefort', addressMapURL: 'https://maps.app.goo.gl/CFQ4QC35KXr2CG9T8' },
+      Lourdes: { address: '3 Rue Ampère, 65100 Lourdes', addressMapURL: 'https://maps.app.goo.gl/3vLjsQ9tmbEbcsv28' },
+      Lons: { address: 'Zone Induspal, 6 Av. Barthélémy Thimonnier, 64140 Lons', addressMapURL: 'https://maps.app.goo.gl/NbyUhm8VC6Ayvi5h7' },
+      Bressols: { address: 'Z.I TRIXES Sortie 67, lieu dit, 82710 Bressols', addressMapURL: 'https://maps.app.goo.gl/tYRB2Grjz1p3LDhK8' },
+      'Plaisance du Touch': { address: '4 Rue des Frères Seigneurie, 31830 Plaisance-du-Touch', addressMapURL: 'https://maps.app.goo.gl/RuCEgm7X8uCCaiKG6' }
     };
 
     const filialeData = {
@@ -172,9 +158,7 @@
         signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-pbc.png',
         address: '2 Rue de Fieuzal, 33520 Bruges',
         addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0xd55290356abf381:0x841cb21749a9626d?sa=X&ved=1t:8290&ictx=111',
-        socialLinks: {
-          linkedin: 'https://www.linkedin.com/company/pro-bus-cars'
-        },
+        socialLinks: { linkedin: 'https://www.linkedin.com/company/pro-bus-cars' },
         defaultPhoto: 'https://media.licdn.com/dms/image/v2/D560BAQFakQ9i1N4k1g/company-logo_100_100/company-logo_100_100/0/1666881599211/pro_bus_cars_logo?e=1743033600&v=beta&t=jfy8EladIlrMJmTCKQFRSAV3ZFoHOIcs939U6kNFNwg'
       },
       boxtore: {
@@ -197,9 +181,7 @@
         signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-skillbus.png',
         address: '4 Rue des Frères Seigneurie, 31830 Plaisance-du-Touch',
         addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x12aeb3fb0ade6baf:0x42fff4ad5012f2d2?sa=X&ved=1t:8290&ictx=111',
-        socialLinks: {
-          linkedin: 'https://www.linkedin.com/company/skillbus/'
-        },
+        socialLinks: { linkedin: 'https://www.linkedin.com/company/skillbus/' },
         defaultPhoto: 'https://media.licdn.com/dms/image/v2/C4D0BAQEeQZLdTsN-ZQ/company-logo_100_100/company-logo_100_100/0/1630484852883/skillbus_logo?e=1743033600&v=beta&t=uwJbTBpUIo75URdP4YubKHuBGgKTPHkYZJf2u_b7Xbk'
       },
       sellerie: {
@@ -208,14 +190,17 @@
         signatureImage: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/signature-sellerie.png',
         address: 'Rte de Lombez, 31830 Plaisance-du-Touch',
         addressMapURL: 'https://www.google.com/maps/place//data=!4m2!3m1!1s0x12aeb302d79c80db:0x9184d1ba1d5368a1?sa=X&ved=1t:8290&ictx=111&cshid=1735040386523745',
-        socialLinks: {
-          instagram: 'https://www.instagram.com/sellerie_bacqueyrisses/'
-        },
+        socialLinks: { instagram: 'https://www.instagram.com/sellerie_bacqueyrisses/' },
         defaultPhoto: 'https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/47983569412c5fa66f2b56955c2dfa0aa261265e/default-sellerie.jpg'
       }
     };
 
+    const typeAdresse = document.getElementById('typeAdresse');
+    const labelNom = document.getElementById('labelNom');
+    const explicationsNom = document.getElementById('explicationsNom');
     const nomInput = document.getElementById('nom');
+    const labelPosteService = document.getElementById('labelPosteService');
+    const explicationsPosteService = document.getElementById('explicationsPosteService');
     const posteServiceInput = document.getElementById('posteService');
     const mailInput = document.getElementById('mail');
     const filialeSelect = document.getElementById('filiale');
@@ -229,6 +214,27 @@
     const villeSelect = document.getElementById('ville');
     const labelVille = document.getElementById('labelVille');
     const explicationsVille = document.getElementById('explicationsVille');
+
+    function updateLabels() {
+      if (typeAdresse.value === 'perso') {
+        labelNom.innerHTML = 'Prénom et Nom<span class="required-asterisk">*</span>';
+        explicationsNom.innerHTML = 'Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti.';
+        nomInput.placeholder = 'Ex : Paul Gubbiotti';
+        labelPosteService.innerHTML = 'Poste / Service<span class="required-asterisk">*</span>';
+        explicationsPosteService.innerHTML = 'Indiquez ici votre intitulé de poste, ainsi que votre service ou département si nécessaire. Ex : Assistant Marketing.';
+        posteServiceInput.placeholder = 'Ex : Assistant Marketing';
+      } else {
+        labelNom.innerHTML = 'Nom du service<span class="required-asterisk">*</span>';
+        explicationsNom.innerHTML = 'Saisissez le nom du service. Par exemple : Marketing.';
+        nomInput.placeholder = 'Ex : Marketing';
+        labelPosteService.innerHTML = 'Prénom et Nom<span class="required-asterisk">*</span>';
+        explicationsPosteService.innerHTML = 'Indiquez ici votre prénom et votre nom. Par exemple : Paul Gubbiotti.';
+        posteServiceInput.placeholder = 'Ex : Paul Gubbiotti';
+      }
+    }
+
+    updateLabels();
+    typeAdresse.addEventListener('change', updateLabels);
 
     if (filialeSelect.value === 'bacqueyrisses') {
       villeSelect.style.display = 'block';
@@ -265,11 +271,9 @@
       const telPortable = telPortableInput.value.trim();
       const photoURL = photoURLInput.value.trim();
       const data = JSON.parse(JSON.stringify(filialeData[filiale]));
-
       if (mail.toLowerCase() === 'marketing@bacqueyrisses.fr') {
         nom = 'Service Marketing';
       }
-
       if (filiale === 'bacqueyrisses') {
         const selectedCity = villeSelect.value;
         if (bacqueyrissesCities[selectedCity]) {
@@ -277,7 +281,6 @@
           data.addressMapURL = bacqueyrissesCities[selectedCity].addressMapURL;
         }
       }
-
       const color = data.color;
       const website = data.website;
       const signatureImage = data.signatureImage;
@@ -286,25 +289,14 @@
       const socialLinks = data.socialLinks;
       const defaultPhoto = data.defaultPhoto;
       const finalPhotoURL = photoURL || defaultPhoto;
-
-      const lk = socialLinks.linkedin 
-        ? '<a href="' + socialLinks.linkedin + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" alt="LinkedIn" width="25" height="25" style="vertical-align: middle;"></a>' 
-        : '';
-      const ig = socialLinks.instagram
-        ? '<a href="' + socialLinks.instagram + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" alt="Instagram" width="25" height="25" style="vertical-align: middle;"></a>'
-        : '';
-      const fb = socialLinks.facebook
-        ? '<a href="' + socialLinks.facebook + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" alt="Facebook" width="25" height="25" style="vertical-align: middle;"></a>'
-        : '';
-      const yt = socialLinks.youtube
-        ? '<a href="' + socialLinks.youtube + '" target="_blank" style="text-decoration: none;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" alt="YouTube" width="25" height="25" style="vertical-align: middle;"></a>'
-        : '';
-
+      const lk = socialLinks.linkedin ? '<a href="' + socialLinks.linkedin + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-linkedin.png" alt="LinkedIn" width="25" height="25" style="vertical-align: middle;"></a>' : '';
+      const ig = socialLinks.instagram ? '<a href="' + socialLinks.instagram + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-instagram.png" alt="Instagram" width="25" height="25" style="vertical-align: middle;"></a>' : '';
+      const fb = socialLinks.facebook ? '<a href="' + socialLinks.facebook + '" target="_blank" style="text-decoration: none; margin-right: 5px;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-facebook.png" alt="Facebook" width="25" height="25" style="vertical-align: middle;"></a>' : '';
+      const yt = socialLinks.youtube ? '<a href="' + socialLinks.youtube + '" target="_blank" style="text-decoration: none;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/icon-youtube.png" alt="YouTube" width="25" height="25" style="vertical-align: middle;"></a>' : '';
       let afaqBlock = '';
       if (filiale === 'bacqueyrisses') {
         afaqBlock = '<p style="margin-top: 0; color: #561164;"><img src="https://raw.githubusercontent.com/PaulGub/signature-bacqueyrisses/refs/heads/main/logo-afaq.png" alt="AFAQ" width="25" height="25" style="vertical-align: middle; margin-right: 5px;">Notre organisme est certifié AFAQ ISO 9001.</p>';
       }
-
       return (
         '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" xmlns="http://www.w3.org/TR/REC-html40">' +
         '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' +
@@ -366,11 +358,7 @@
     }
 
     genererBtn.addEventListener('click', () => {
-      if (
-        !nomInput.checkValidity() ||
-        !mailInput.checkValidity() ||
-        !filialeSelect.checkValidity()
-      ) {
+      if (!typeAdresse.checkValidity() || !nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
         alert("Veuillez remplir tous les champs obligatoires.");
         return;
       }
@@ -378,16 +366,11 @@
         alert("Veuillez choisir la ville pour la filiale Bacqueyrisses.");
         return;
       }
-      const html = generateSignatureHTML();
-      previewArea.innerHTML = html;
+      previewArea.innerHTML = generateSignatureHTML();
     });
 
     copyBtn.addEventListener('click', () => {
-      if (
-        !nomInput.checkValidity() ||
-        !mailInput.checkValidity() ||
-        !filialeSelect.checkValidity()
-      ) {
+      if (!typeAdresse.checkValidity() || !nomInput.checkValidity() || !posteServiceInput.checkValidity() || !mailInput.checkValidity() || !filialeSelect.checkValidity()) {
         alert("Veuillez remplir tous les champs obligatoires avant de copier le code.");
         return;
       }
