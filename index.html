@@ -66,12 +66,12 @@
   <div class="container">
     <form id="signatureForm">
       <label for="nom">Prénom et Nom <span class="required-asterisk">*</span></label>
-      <p class="explications">Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti.</p>
+      <p class="explications">Saisissez votre prénom et votre nom. Par exemple : Paul Gubbiotti. Si cette adresse e-mail est utilisée pour un service spécifique (par exemple, Marketing), veuillez mentionner le nom du service.</p>
       <input type="text" id="nom" placeholder="Ex : Paul Gubbiotti" required>
 
-      <label for="posteService">Poste / Service <span class="required-asterisk">*</span></label>
+      <label for="posteService">Poste / Service</label>
       <p class="explications">Indiquez ici votre intitulé de poste, ainsi que votre service ou département si nécessaire.</p>
-      <input type="text" id="posteService" placeholder="Ex : Assistant Marketing" required>
+      <input type="text" id="posteService" placeholder="Ex : Assistant Marketing">
 
       <label for="mail">Email <span class="required-asterisk">*</span></label>
       <p class="explications">Entrez votre adresse mail professionnelle. Par exemple : exemple@bacqueyrisses.fr.</p>
@@ -257,7 +257,7 @@
     });
 
     function generateSignatureHTML() {
-      const nom = nomInput.value.trim();
+      let nom = nomInput.value.trim();
       const posteService = posteServiceInput.value.trim();
       const mail = mailInput.value.trim();
       const filiale = filialeSelect.value;
@@ -265,6 +265,10 @@
       const telPortable = telPortableInput.value.trim();
       const photoURL = photoURLInput.value.trim();
       const data = JSON.parse(JSON.stringify(filialeData[filiale]));
+
+      if (mail.toLowerCase() === 'marketing@bacqueyrisses.fr') {
+        nom = 'Service Marketing';
+      }
 
       if (filiale === 'bacqueyrisses') {
         const selectedCity = villeSelect.value;
@@ -364,7 +368,6 @@
     genererBtn.addEventListener('click', () => {
       if (
         !nomInput.checkValidity() ||
-        !posteServiceInput.checkValidity() ||
         !mailInput.checkValidity() ||
         !filialeSelect.checkValidity()
       ) {
@@ -382,7 +385,6 @@
     copyBtn.addEventListener('click', () => {
       if (
         !nomInput.checkValidity() ||
-        !posteServiceInput.checkValidity() ||
         !mailInput.checkValidity() ||
         !filialeSelect.checkValidity()
       ) {
